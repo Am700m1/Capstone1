@@ -2,9 +2,13 @@ package org.example.ecommercewebsite.Model;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
+@Data
+@AllArgsConstructor
 public class Product {
-    @NotEmpty(message = "ID must be filled!")
+    @NotEmpty(message = "Product ID must be filled!")
     private String id;
 
     @NotEmpty(message = "Product Name must be filled!")
