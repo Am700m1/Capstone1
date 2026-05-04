@@ -6,10 +6,8 @@ import org.example.ecommercewebsite.Api.ApiResponse;
 import org.example.ecommercewebsite.Model.MerchantStock;
 import org.example.ecommercewebsite.Service.MerchantStockService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -19,7 +17,7 @@ import java.util.ArrayList;
 public class MerchantStockController {
     private final MerchantStockService merchantStockService;
 
-
+    @GetMapping("/get-merchant-stocks")
     public ResponseEntity<?> getMerchantStocks(){
         ArrayList<MerchantStock> merchantStocks = merchantStockService.getMerchantStocks();
 
@@ -30,7 +28,12 @@ public class MerchantStockController {
         }
     }
 
-    public ResponseEntity<?> addMerchantStock(@RequestBody @Valid MerchantStock merchantStock){
+    @PostMapping("/add")
+    public ResponseEntity<?> addMerchantStock(@RequestBody @Valid MerchantStock merchantStock, Errors errors){
+        if(errors.hasErrors()){
+            return ResponseEntity.status(400).body(errors.getFieldError().getDefaultMessage());
+        }
+
         return switch (merchantStockService.addMerchantStock(merchantStock)){
             case 1 -> ResponseEntity.status(200).body(new ApiResponse("Merchant stock was added successfully"));
             case 2-> ResponseEntity.status(400).body(new ApiResponse("Another Merchant Stock with the same ID exists!"));
@@ -40,7 +43,12 @@ public class MerchantStockController {
     }
 
 
-    public ResponseEntity<?> updateMerchantStock(@PathVariable String id, @RequestBody @Valid MerchantStock merchantStock){
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateMerchantStock(@PathVariable String id, @RequestBody @Valid MerchantStock merchantStock, Errors errors){
+        if(errors.hasErrors()){
+            return ResponseEntity.status(400).body(errors.getFieldError().getDefaultMessage());
+        }
         return switch (merchantStockService.updateMerchantStock(id, merchantStock)) {
             case 1 -> ResponseEntity.status(200).body(new ApiResponse("Merchant stock was updated successfully"));
             case 2 -> ResponseEntity.status(400).body(new ApiResponse("Another Merchant Stock with the same ID exists!"));
@@ -51,7 +59,8 @@ public class MerchantStockController {
     }
 
 
-    public ResponseEntity<?> deleteMerchantStock(String id){
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteMerchantStock(@PathVariable String id){
         if(merchantStockService.deleteMerchantStocks(id)){
             return ResponseEntity.status(200).body(new ApiResponse("Merchant stock was deleted successfully!"));
         }else{
