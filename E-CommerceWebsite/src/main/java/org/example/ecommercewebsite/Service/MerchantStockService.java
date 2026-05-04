@@ -97,4 +97,42 @@ public class MerchantStockService {
         }
         return false;
     }
+
+    public Integer addMerchantStocks(String productID, String merchantID, Integer stock){
+        ArrayList<Product> products = productService.getProducts();
+        ArrayList<Merchant> merchants = merchantService.getMerchants();
+
+        boolean productExist = false;
+        boolean merchantExist = false;
+        for(Merchant merchant: merchants){
+            if(merchant.getId().equalsIgnoreCase(merchantID)){
+                merchantExist = true;
+                break;
+            }
+        }
+
+        if(!merchantExist){
+            return 2;
+        }
+
+        for(Product product: products){
+            if(product.getId().equalsIgnoreCase(productID)){
+                productExist = true;
+                break;
+            }
+        }
+
+        if(!productExist){
+            return 3;
+        }
+
+        for(MerchantStock merchantStock: merchantStocks){
+            if(merchantStock.getMerchantId().equalsIgnoreCase(merchantID) && merchantStock.getProductId().equalsIgnoreCase(productID)){
+                merchantStock.setStock(merchantStock.getStock() + stock);
+                return 1;
+            }
+        }
+
+        return 0;
+    }
 }

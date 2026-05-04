@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.ecommercewebsite.Api.ApiResponse;
 import org.example.ecommercewebsite.Model.Merchant;
 import org.example.ecommercewebsite.Service.MerchantService;
+import org.example.ecommercewebsite.Service.MerchantStockService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class MerchantController {
     private final MerchantService merchantService;
+    private final MerchantStockService merchantStockService;
 
     @GetMapping("/get-merchants")
     public ResponseEntity<?> getMerchants(){
@@ -64,9 +66,9 @@ public class MerchantController {
         }
     }
 
-    @PutMapping("/add-merchant-stocks/{productId}/{merchantId}/{merchantStockId}/{stock}")
-    public ResponseEntity<?> addMerchantStocks(@PathVariable String productId, @PathVariable String merchantId, @PathVariable String merchantStockId, @PathVariable Integer stock){
-        return switch (merchantService.addMerchantStocks(productId, merchantId, merchantStockId, stock)){
+    @PutMapping("/add-merchant-stocks/{productId}/{merchantId}/{stock}")
+    public ResponseEntity<?> addMerchantStocks(@PathVariable String productId, @PathVariable String merchantId, @PathVariable Integer stock){
+        return switch (merchantStockService.addMerchantStocks(productId, merchantId, stock)){
             case 1 -> ResponseEntity.status(200).body(new ApiResponse("Merchant Stocks were added successfully"));
             case 2 -> ResponseEntity.status(400).body(new ApiResponse("Merchant ID does not exist!"));
             case 3 -> ResponseEntity.status(400).body(new ApiResponse("Product ID does not exist!"));
