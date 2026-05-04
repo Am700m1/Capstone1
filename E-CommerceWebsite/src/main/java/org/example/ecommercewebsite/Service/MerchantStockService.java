@@ -15,15 +15,16 @@ public class MerchantStockService {
     private final ProductService productService;
     private final MerchantService merchantService;
 
-    ArrayList<Product> products = productService.getProducts();
-    ArrayList<Merchant> merchants = merchantService.getMerchants();
 
 
     @Getter
     ArrayList<MerchantStock> merchantStocks = new ArrayList<>();
 
     public Integer addMerchantStock(MerchantStock merchantStock){
-        Boolean merchantExist = false;
+        ArrayList<Product> products = productService.getProducts();
+        ArrayList<Merchant> merchants = merchantService.getMerchants();
+
+        boolean merchantExist = false;
         for(MerchantStock merchantStock1: merchantStocks){
             if(merchantStock1.getId().equalsIgnoreCase(merchantStock.getId())){
                 return 2;
@@ -50,8 +51,11 @@ public class MerchantStockService {
     }
 
     public Integer updateMerchantStock(String id, MerchantStock merchantStock){
-        Boolean merchantExist = false;
-        Boolean productExist = false;
+        ArrayList<Product> products = productService.getProducts();
+        ArrayList<Merchant> merchants = merchantService.getMerchants();
+
+        boolean merchantExist = false;
+        boolean productExist = false;
 
         for(Merchant merchant: merchants){
             if(merchant.getId().equalsIgnoreCase(merchantStock.getMerchantId())){
@@ -66,6 +70,7 @@ public class MerchantStockService {
             for (Product product : products) {
                 if (product.getId().equalsIgnoreCase(merchantStock.getProductId())) {
                     productExist = true;
+                    break;
                 }
             }
         }
