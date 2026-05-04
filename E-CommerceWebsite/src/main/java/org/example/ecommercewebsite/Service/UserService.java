@@ -1,9 +1,11 @@
 package org.example.ecommercewebsite.Service;
 
 import org.example.ecommercewebsite.Model.User;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+@Service
 public class UserService {
     ArrayList<User> users = new ArrayList<>();
 
