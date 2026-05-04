@@ -48,7 +48,7 @@ public class CategoryController {
             return ResponseEntity.status(400).body(errors.getFieldError().getDefaultMessage());
         }
 
-        if(categoryService.addCategory(category)){
+        if(categoryService.updateCategory(id, category)){
             return ResponseEntity.status(200).body(new ApiResponse("Category was updated successfully"));
         }else{
             return ResponseEntity.status(400).body(new ApiResponse("Category was not found!"));
