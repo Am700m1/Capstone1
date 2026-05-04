@@ -11,13 +11,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class MerchantStock {
 
-    @NotEmpty(message = "MerchantService Stock ID must be filled!")
+    @NotEmpty(message = "Merchant Stock ID must be filled!")
     private String id;
 
     @NotEmpty(message = "Product ID must be filled!")
     private String productId;
 
-    @NotEmpty(message = "MerchantService ID must be filled!")
+    @NotEmpty(message = "Merchant ID must be filled!")
     private String merchantId;
 
     @NotEmpty(message = "Stock must be filled!")

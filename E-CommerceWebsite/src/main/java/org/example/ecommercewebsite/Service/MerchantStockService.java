@@ -1,34 +1,86 @@
 package org.example.ecommercewebsite.Service;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.example.ecommercewebsite.Model.Merchant;
 import org.example.ecommercewebsite.Model.MerchantStock;
+import org.example.ecommercewebsite.Model.Product;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+@Service
+@RequiredArgsConstructor
 public class MerchantStockService {
+    private final ProductService productService;
+    private final MerchantService merchantService;
+
+    ArrayList<Product> products = productService.getProducts();
+    ArrayList<Merchant> merchants = merchantService.getMerchants();
+
+
+    @Getter
     ArrayList<MerchantStock> merchantStocks = new ArrayList<>();
 
-    public Boolean addMerchantStock(MerchantStock merchantStock){
+    public Integer addMerchantStock(MerchantStock merchantStock){
+        Boolean merchantExist = false;
         for(MerchantStock merchantStock1: merchantStocks){
             if(merchantStock1.getId().equalsIgnoreCase(merchantStock.getId())){
-                return false;
+                return 2;
             }
         }
-        merchantStocks.add(merchantStock);
-        return true;
-    }
-
-    public ArrayList<MerchantStock> getMerchantStocks(){
-        return merchantStocks;
-    }
-
-    public Boolean updateMerchantStocks(String id, MerchantStock merchantStock){
-        for(int i = 0; i < merchantStocks.size(); i++){
-            if(merchantStocks.get(i).getId().equalsIgnoreCase(id)){
-                merchantStocks.set(i, merchantStock);
-                return true;
+        for(Merchant merchant: merchants){
+            if(merchant.getId().equalsIgnoreCase(merchantStock.getMerchantId())){
+                merchantExist = true;
+                break;
             }
         }
-        return false;
+
+        if(!merchantExist) {
+            return 3;
+        }else{
+            for(Product product: products){
+                if(product.getId().equalsIgnoreCase(merchantStock.getProductId())){
+                    merchantStocks.add(merchantStock);
+                    return 1;
+                }
+            }
+            return 4;
+        }
+    }
+
+    public Integer updateMerchantStock(String id, MerchantStock merchantStock){
+        Boolean merchantExist = false;
+        Boolean productExist = false;
+
+        for(Merchant merchant: merchants){
+            if(merchant.getId().equalsIgnoreCase(merchantStock.getMerchantId())){
+                merchantExist = true;
+                break;
+            }
+        }
+
+        if(!merchantExist){
+            return 3;
+        }else {
+            for (Product product : products) {
+                if (product.getId().equalsIgnoreCase(merchantStock.getProductId())) {
+                    productExist = true;
+                }
+            }
+        }
+
+        if(!productExist){
+            return 4;
+        }else {
+            for (int i = 0; i < merchantStocks.size(); i++) {
+                if (merchantStocks.get(i).getId().equalsIgnoreCase(id)) {
+                    merchantStocks.set(i, merchantStock);
+                    return 1;
+                }
+            }
+        }
+        return 0;
     }
 
     public Boolean deleteMerchantStocks(String id){
