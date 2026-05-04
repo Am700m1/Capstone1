@@ -42,6 +42,7 @@ public class ProductController {
         };
     }
 
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable String id, @RequestBody @Valid Product product, Errors errors){
         if(errors.hasErrors()){
             return ResponseEntity.status(400).body(errors.getFieldError().getDefaultMessage());
@@ -54,6 +55,7 @@ public class ProductController {
         };
     }
 
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable String id){
         if(productService.deleteProduct(id)){
             return ResponseEntity.status(200).body(new ApiResponse("Product was deleted successfully"));
