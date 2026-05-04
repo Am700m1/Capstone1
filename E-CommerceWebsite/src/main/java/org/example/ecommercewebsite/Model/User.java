@@ -18,7 +18,7 @@ public class User {
 
     @NotEmpty(message = "Password must be filled!")
     @Size(min = 7, message = "Password must consist of at least 7 characters!")
-    @Pattern(regexp = "^(?=.[a-z])(?=.[A-Z])(?=.\\d)(?=.[@#$%^&+=])$", message = "Password must have characters, digits, and special character!")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).*$", message = "Password must have characters, digits, and special character!")
     private String password;
 
     @Email
