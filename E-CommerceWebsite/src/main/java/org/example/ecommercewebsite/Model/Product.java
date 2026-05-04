@@ -1,6 +1,7 @@
 package org.example.ecommercewebsite.Model;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +16,7 @@ public class Product {
     @Size(min = 3, message = "Product must consist of at least three characters!")
     private String name;
 
-    @NotEmpty(message = "Product Price must be filled!")
+    @NotNull(message = "Product Price must be filled!")
     private Double price;
 
     @NotEmpty(message = "Category ID must be filled!")
