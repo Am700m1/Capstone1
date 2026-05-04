@@ -64,4 +64,14 @@ public class MerchantController {
         }
     }
 
+    @PutMapping("/add-merchant-stocks/{productId}/{merchantId}/{merchantStockId}/{stock}")
+    public ResponseEntity<?> addMerchantStocks(@PathVariable String productId, @PathVariable String merchantId, @PathVariable String merchantStockId, @PathVariable Integer stock){
+        return switch (merchantService.addMerchantStocks(productId, merchantId, merchantStockId, stock)){
+            case 1 -> ResponseEntity.status(200).body(new ApiResponse("Merchant Stocks were added successfully"));
+            case 2 -> ResponseEntity.status(400).body(new ApiResponse("Merchant ID does not exist!"));
+            case 3 -> ResponseEntity.status(400).body(new ApiResponse("Product ID does not exist!"));
+            default -> ResponseEntity.status(400).body(new ApiResponse("Merchant Stock does not exist!"));
+        };
+    }
+
 }
