@@ -13,12 +13,13 @@ import java.util.ArrayList;
 
 public class ProductService {
     private final CategoryService categoryService;
-    ArrayList<Category> categories = categoryService.getCategories();
 
     @Getter
     ArrayList<Product> products = new ArrayList<>();
 
+
     public Integer addProduct(Product product){
+        ArrayList<Category> categories = categoryService.getCategories();
         for(Product product1: products){
             if(product1.getId().equalsIgnoreCase(product.getId())){
                 return 2;
@@ -34,9 +35,10 @@ public class ProductService {
     }
 
     public Integer updateProduct(String id, Product product){
+        ArrayList<Category> categories = categoryService.getCategories();
         Boolean exist = false;
         for(Category category: categories){
-            if(category.getId().equalsIgnoreCase(product.getId())){
+            if(category.getId().equalsIgnoreCase(product.getCategoryID())){
                 exist = true;
             }
         }
