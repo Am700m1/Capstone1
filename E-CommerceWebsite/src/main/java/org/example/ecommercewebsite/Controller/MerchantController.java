@@ -1,12 +1,13 @@
 package org.example.ecommercewebsite.Controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommercewebsite.Api.ApiResponse;
 import org.example.ecommercewebsite.Model.Merchant;
 import org.example.ecommercewebsite.Service.MerchantService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 public class MerchantController {
     private final MerchantService merchantService;
 
+    @GetMapping("/get-merchants")
     public ResponseEntity<?> getMerchants(){
         ArrayList<Merchant> merchants = merchantService.getMerchants();
         if(merchants.isEmpty()){
@@ -26,7 +28,11 @@ public class MerchantController {
     }
 
 
-    public ResponseEntity<?> addMerchant(Merchant merchant){
+    @PostMapping("/add")
+    public ResponseEntity<?> addMerchant(@RequestBody @Valid Merchant merchant, Errors errors){
+        if(errors.hasErrors()){
+            return ResponseEntity.status(400).body(errors.getFieldError().getDefaultMessage());
+        }
         if(merchantService.addMerchant(merchant)){
             return ResponseEntity.status(200).body(new ApiResponse("Merchant was added successfully"));
         }else{
@@ -35,7 +41,12 @@ public class MerchantController {
     }
 
 
-    public ResponseEntity<?> updateMerchant(String id, Merchant merchant){
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateMerchant(@PathVariable String id, @RequestBody @Valid Merchant merchant, Errors errors){
+        if(errors.hasErrors()){
+            return ResponseEntity.status(400).body(errors.getFieldError().getDefaultMessage());
+        }
+
         if(merchantService.updateMerchant(id, merchant)){
             return ResponseEntity.status(200).body(new ApiResponse("Merchant was updated successfully"));
         }else{
@@ -43,7 +54,9 @@ public class MerchantController {
         }
     }
 
-    public ResponseEntity<?> deleteMerchant(String id){
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteMerchant(@PathVariable String id){
         if(merchantService.deleteMerchant(id)){
             return ResponseEntity.status(200).body(new ApiResponse("Merchant was deleted successfully"));
         }else{
