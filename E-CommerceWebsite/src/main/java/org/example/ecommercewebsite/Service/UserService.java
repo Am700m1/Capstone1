@@ -20,6 +20,9 @@ public class UserService {
     @Getter
     ArrayList<User> users = new ArrayList<>();
 
+    @Getter
+    ArrayList<Product> wishList = new ArrayList<>();
+
     public Boolean addUser(User user){
         for(User user1: users){
             if(user1.getId().equalsIgnoreCase(user.getId())){
@@ -92,5 +95,55 @@ public class UserService {
         }else{
             return 4;
         }
+    }
+
+    public Integer addOffer(String userId, String productId, Double percentage){
+        ArrayList<Product> products = productService.getProducts();
+        User user = users.stream().filter(user1 -> user1.getId().equalsIgnoreCase(userId)).findFirst().orElse(null);
+        Product product = products.stream().filter(product1 -> product1.getId().equalsIgnoreCase(productId)).findFirst().orElse(null);
+
+        if(user == null) return 0;
+        if(product == null) return 3;
+        if(percentage >= 1 || percentage <= 0) return 4;
+        if(!user.getRole().equalsIgnoreCase("admin")){
+            return 2;
+        }
+
+        product.setIsOffer(true);
+        product.setPrice(product.getPrice() * (1 - percentage));
+//        products.get(products.indexOf(product)).setIsOffer(true);
+//        products.get(products.indexOf(product)).setPrice(product.getPrice() * (1 - percentage));
+        return 1;
+    }
+
+    public ArrayList<Product> getDiscountedProducts(){
+        ArrayList<Product> products = productService.getProducts();
+        ArrayList<Product> discountedProducts = new ArrayList<>();
+
+        for(Product product: products){
+            if(product.getIsOffer()){
+                discountedProducts.add(product);
+            }
+        }
+
+        return discountedProducts;
+    }
+
+    public Integer addToWishList(String productId){
+        ArrayList<Product> products = productService.getProducts();
+        for(Product product1: wishList){
+            if(product1.getId().equalsIgnoreCase(productId)){
+                return 0;
+            }
+        }
+
+        for(Product product: products){
+            if(product.getId().equalsIgnoreCase(productId)){
+                wishList.add(product);
+                return 1;
+            }
+        }
+
+        return 2;
     }
 }

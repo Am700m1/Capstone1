@@ -92,4 +92,45 @@ public class UserController {
         };
     }
 
+    @PutMapping("/put-offer/{userId}/{productId}/{percentage}")
+    public ResponseEntity<?> addOffer(@PathVariable String userId,@PathVariable String productId,@PathVariable Double percentage){
+        return switch (userService.addOffer(userId, productId, percentage)){
+            case 1 -> ResponseEntity.status(200).body(new ApiResponse("Offer was added successfully"));
+            case 2 -> ResponseEntity.status(400).body(new ApiResponse("You are not authorized to do this action!"));
+            case 3 -> ResponseEntity.status(400).body(new ApiResponse("Product was not found!"));
+            case 4 -> ResponseEntity.status(400).body(new ApiResponse("Percentage is more than 1 or less than 0!"));
+            default -> ResponseEntity.status(400).body(new ApiResponse("User was not found!"));
+        };
+    }
+
+    @GetMapping("/get-offers")
+    public ResponseEntity<?> getDiscountedProducts(){
+        ArrayList<Product> discountedProducts = userService.getDiscountedProducts();
+        if(discountedProducts.isEmpty()){
+            return ResponseEntity.status(400).body(new ApiResponse("There is no discounted products yet!"));
+        }else{
+            return ResponseEntity.status(200).body(discountedProducts);
+        }
+    }
+
+    @PostMapping("/add-to-wishlist/{productId}")
+    public ResponseEntity<?> addToWishList(@PathVariable String productId){
+        return switch (userService.addToWishList(productId)){
+            case 0 -> ResponseEntity.status(400).body(new ApiResponse("Product is already added to wishlist!"));
+            case 1 -> ResponseEntity.status(200).body(new ApiResponse("Product was added to the wishlist successfully"));
+            default -> ResponseEntity.status(400).body(new ApiResponse("Product was not found!"));
+        };
+    }
+
+    @GetMapping("/get-wishlist")
+    public ResponseEntity<?> getWishList(){
+        ArrayList<Product> wishlist = userService.getWishList();
+
+        if(wishlist.isEmpty()){
+            return ResponseEntity.status(400).body(new ApiResponse("There is no products inside the wishlist!"));
+        }else{
+            return ResponseEntity.status(200).body(wishlist);
+        }
+    }
+
 }

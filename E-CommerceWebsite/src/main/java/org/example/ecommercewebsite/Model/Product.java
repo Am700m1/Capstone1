@@ -1,5 +1,6 @@
 package org.example.ecommercewebsite.Model;
 
+import jakarta.validation.constraints.AssertFalse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -22,4 +23,8 @@ public class Product {
     @NotEmpty(message = "Category ID must be filled!")
     @Size(min = 3, message = "")
     private String categoryID;
+
+    @NotNull(message = "is offer must be filled!")
+    @AssertFalse
+    private Boolean isOffer;
 }
