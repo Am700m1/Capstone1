@@ -63,4 +63,26 @@ public class ProductController {
             return ResponseEntity.status(400).body(new ApiResponse("Product was not found!"));
         }
     }
+
+    @GetMapping("/get-products/price-sorted")
+    public ResponseEntity<?> sortBasedOnPrice(){
+        ArrayList<Product> sortedProducts = productService.sortBasedOnPrice();
+
+        if(sortedProducts.isEmpty()){
+            return ResponseEntity.status(400).body(new ApiResponse("There is no products added yet!"));
+        }else{
+            return ResponseEntity.status(200).body(sortedProducts);
+        }
+    }
+
+    @GetMapping("/get-products/name-sorted")
+    public ResponseEntity<?> sortBasedOnName(){
+        ArrayList<Product> sortedProducts = productService.sortBasedOnName();
+
+        if(sortedProducts.isEmpty()){
+            return ResponseEntity.status(400).body(new ApiResponse("There is no products added yet!"));
+        }else{
+            return ResponseEntity.status(200).body(sortedProducts);
+        }
+    }
 }

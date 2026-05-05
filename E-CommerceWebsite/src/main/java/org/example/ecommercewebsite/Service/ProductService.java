@@ -7,6 +7,7 @@ import org.example.ecommercewebsite.Model.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 @Service
 @RequiredArgsConstructor
@@ -63,6 +64,33 @@ public class ProductService {
             }
         }
         return false;
+    }
+
+    public ArrayList<Product> sortBasedOnPrice(){
+        ArrayList<Product> sortedBasedOnPrice = products;
+        sortedBasedOnPrice.sort(new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                if (o1.getPrice() == o2.getPrice()) {
+                    return 0;
+                }
+                return o1.getPrice() < o2.getPrice() ? -1 : 1;
+            }
+        });
+
+        return sortedBasedOnPrice;
+    }
+
+
+    public ArrayList<Product> sortBasedOnName(){
+        ArrayList<Product> sortedBasedOnName = products;
+        sortedBasedOnName.sort(new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        return sortedBasedOnName;
     }
 
 }
