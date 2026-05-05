@@ -64,6 +64,17 @@ public class ProductController {
         }
     }
 
+
+    @GetMapping("/get-by-category/{categoryId}")
+    public ResponseEntity<?> getProductsByCategory(@PathVariable String categoryId){
+        ArrayList<Product> products = productService.getProductsByCategory(categoryId);
+        if(products.isEmpty()){
+            return ResponseEntity.status(400).body(new ApiResponse("There is no products in that category!"));
+        }else{
+            return ResponseEntity.status(200).body(products);
+        }
+    }
+
     @GetMapping("/get-products/price-sorted")
     public ResponseEntity<?> sortBasedOnPrice(){
         ArrayList<Product> sortedProducts = productService.sortBasedOnPrice();

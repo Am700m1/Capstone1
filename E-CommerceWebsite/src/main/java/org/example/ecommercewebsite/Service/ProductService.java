@@ -66,6 +66,18 @@ public class ProductService {
         return false;
     }
 
+    public ArrayList<Product> getProductsByCategory(String categoryId){
+        ArrayList<Product> sameCategoryProducts = new ArrayList<>();
+
+        for(Product product: products){
+            if(product.getCategoryID().equalsIgnoreCase(categoryId)){
+                sameCategoryProducts.add(product);
+            }
+        }
+        
+        return sameCategoryProducts;
+    }
+
     public ArrayList<Product> sortBasedOnPrice(){
         ArrayList<Product> sortedBasedOnPrice = products;
         sortedBasedOnPrice.sort(new Comparator<Product>() {
