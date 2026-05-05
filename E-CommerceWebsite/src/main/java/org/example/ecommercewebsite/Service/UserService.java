@@ -74,6 +74,7 @@ public class UserService {
 
         user.setBalance(user.getBalance() - product.getPrice());
         merchantStock.setStock(merchantStock.getStock() - 1);
+        productService.addToPurchasedList(productId);
         return 1;
     }
 
@@ -145,5 +146,16 @@ public class UserService {
         }
 
         return 2;
+    }
+
+    public Integer blockUser(String adminId, String userId){
+        User admin = users.stream().filter(user -> user.getId().equalsIgnoreCase(adminId) && user.getRole().equalsIgnoreCase("admin")).findFirst().orElse(null);
+        User user = users.stream().filter(user1 -> user1.getId().equalsIgnoreCase(userId)).findFirst().orElse(null);
+
+        if(admin == null) return 2;
+        if(user == null) return 0;
+
+        users.remove(user);
+        return 1;
     }
 }

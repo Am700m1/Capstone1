@@ -18,6 +18,10 @@ public class ProductService {
     @Getter
     ArrayList<Product> products = new ArrayList<>();
 
+    @Getter
+    ArrayList<Product> purchasedProducts = new ArrayList<>();
+
+
 
     public Integer addProduct(Product product){
         ArrayList<Category> categories = categoryService.getCategories();
@@ -103,6 +107,14 @@ public class ProductService {
             }
         });
         return sortedBasedOnName;
+    }
+
+    public void addToPurchasedList(String productId){
+        for(Product product: products){
+            if(product.getId().equalsIgnoreCase(productId)){
+                purchasedProducts.add(product);
+            }
+        }
     }
 
 }

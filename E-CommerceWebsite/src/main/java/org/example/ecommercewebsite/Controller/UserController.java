@@ -133,4 +133,13 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("/block/{adminId}/{userId}")
+    public ResponseEntity<?> blockUser(@PathVariable String adminId,@PathVariable String userId){
+        return switch (userService.blockUser(adminId, userId)){
+            case 1 -> ResponseEntity.status(200).body(new ApiResponse("User was Blocked/removed successfully"));
+            case 2 -> ResponseEntity.status(400).body(new ApiResponse("You are not authorized to do this action!"));
+            default -> ResponseEntity.status(400).body(new ApiResponse("User was not found!"));
+        };
+    }
+
 }

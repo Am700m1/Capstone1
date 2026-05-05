@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommercewebsite.Api.ApiResponse;
 import org.example.ecommercewebsite.Model.Product;
-import org.example.ecommercewebsite.Service.CategoryService;
 import org.example.ecommercewebsite.Service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -94,6 +93,18 @@ public class ProductController {
             return ResponseEntity.status(400).body(new ApiResponse("There is no products added yet!"));
         }else{
             return ResponseEntity.status(200).body(sortedProducts);
+        }
+    }
+
+
+    @GetMapping("/purchase-history")
+    public ResponseEntity<?> getPurchaseHistory(){
+        ArrayList<Product> purchaseHistory = productService.getPurchasedProducts();
+
+        if(purchaseHistory.isEmpty()){
+            return ResponseEntity.status(400).body(new ApiResponse("There is no products inside the purchaseHistory!"));
+        }else{
+            return ResponseEntity.status(200).body(purchaseHistory);
         }
     }
 }

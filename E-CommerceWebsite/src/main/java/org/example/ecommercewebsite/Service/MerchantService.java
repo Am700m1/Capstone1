@@ -3,8 +3,6 @@ package org.example.ecommercewebsite.Service;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommercewebsite.Model.Merchant;
-import org.example.ecommercewebsite.Model.MerchantStock;
-import org.example.ecommercewebsite.Model.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,7 +10,6 @@ import java.util.ArrayList;
 @Service
 @RequiredArgsConstructor
 public class MerchantService {
-    private final ProductService productService;
 
     @Getter
     ArrayList<Merchant> merchants = new ArrayList<>();
