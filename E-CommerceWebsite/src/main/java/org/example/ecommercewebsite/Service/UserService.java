@@ -72,37 +72,25 @@ public class UserService {
         user.setBalance(user.getBalance() - product.getPrice());
         merchantStock.setStock(merchantStock.getStock() - 1);
         return 1;
+    }
 
-//        for(MerchantStock merchantStock: merchantStocks){
-//            if(merchantStock.getProductId().equalsIgnoreCase(productId) && merchantStock.getMerchantId().equalsIgnoreCase(merchantId)){
-//                if(merchantStock.getStock() > 0) {
-//                    for(User user: users){
-//                        if(user.getId().equalsIgnoreCase(userId)){
-//                            userExist = true;
-//                            for(Product product: products){
-//                                if(product.getId().equalsIgnoreCase(productId)){
-//                                    productExist = true;
-//                                    if(user.getBalance() >= product.getPrice()){
-//                                        user.setBalance(user.getBalance() - product.getPrice());
-//                                        merchantStock.setStock(merchantStock.getStock() - 1);
-//                                        return 1;
-//                                    }else{
-//                                        return 5;
-//                                    }
-//                                }else{
-//                                    return 3;
-//                                }
-//                            }
-//                        }else{
-//                            return 2;
-//                        }
-//                    }
-//                }else{
-//                    return 6;
-//                }
-//            }else{
-//                return 0;
-//            }
-//        }
+    public Integer addProduct(String userId, Product product){
+        ArrayList<Product> products = productService.getProducts();
+        User user = users.stream().filter(user1 -> user1.getId().equalsIgnoreCase(userId)).findFirst().orElse(null);
+
+        if(user == null){
+            return 0;
+        }else if(!user.getRole().equalsIgnoreCase("admin")){
+            return 2;
+        }
+
+        Integer productCheck = productService.addProduct(product);
+        if(productCheck == 1){
+            return 1;
+        }else if(productCheck == 2){
+            return 3;
+        }else{
+            return 4;
+        }
     }
 }
