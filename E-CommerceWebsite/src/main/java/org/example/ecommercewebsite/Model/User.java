@@ -5,6 +5,8 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.ArrayList;
+
 @Data
 @AllArgsConstructor
 public class User {
@@ -31,4 +33,7 @@ public class User {
     @NotNull(message = "Balance must be filled")
     @Positive(message = "Balance must be a positive number!")
     private Double balance;
+
+    @NotNull(message = "Wishlist must be initialized!")
+    private ArrayList<String> wishlist;
 }

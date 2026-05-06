@@ -19,9 +19,9 @@ public class UserService {
 
     @Getter
     ArrayList<User> users = new ArrayList<>();
-
-    @Getter
-    ArrayList<Product> wishList = new ArrayList<>();
+//
+//    @Getter
+//    ArrayList<Product> wishList = new ArrayList<>();
 
     public Boolean addUser(User user){
         for(User user1: users){
@@ -98,22 +98,20 @@ public class UserService {
         }
     }
 
-    public Integer addOffer(String userId, String productId, Double percentage){
+    public Integer addOffer(String userId, String productId, Integer percentage){
         ArrayList<Product> products = productService.getProducts();
         User user = users.stream().filter(user1 -> user1.getId().equalsIgnoreCase(userId)).findFirst().orElse(null);
         Product product = products.stream().filter(product1 -> product1.getId().equalsIgnoreCase(productId)).findFirst().orElse(null);
 
         if(user == null) return 0;
         if(product == null) return 3;
-        if(percentage >= 1 || percentage <= 0) return 4;
+        if(percentage >= 100 || percentage <= 0) return 4;
         if(!user.getRole().equalsIgnoreCase("admin")){
             return 2;
         }
 
         product.setIsOffer(true);
-        product.setPrice(product.getPrice() * (1 - percentage));
-//        products.get(products.indexOf(product)).setIsOffer(true);
-//        products.get(products.indexOf(product)).setPrice(product.getPrice() * (1 - percentage));
+        product.setPrice(product.getPrice() * (1 - percentage/100.0));
         return 1;
     }
 
@@ -130,21 +128,46 @@ public class UserService {
         return discountedProducts;
     }
 
-    public Integer addToWishList(String productId){
+    public ArrayList<Product> getWishlist(String userId){
+        User user = users.stream().filter(user1 -> user1.getId().equalsIgnoreCase(userId)).findFirst().orElse(null);
+        if(user == null) return null;
+
         ArrayList<Product> products = productService.getProducts();
-        for(Product product1: wishList){
-            if(product1.getId().equalsIgnoreCase(productId)){
+        ArrayList<String> stringWishlist = user.getWishlist();
+        ArrayList<Product> wishlist = new ArrayList<>();
+
+        for(String item: stringWishlist) {
+            for (Product product : products) {
+                if (product.getId().equalsIgnoreCase(item)){
+                    wishlist.add(product);
+                }
+            }
+        }
+        return wishlist;
+    }
+
+    public Integer addToWishList(String userId, String productId){
+        ArrayList<Product> products = productService.getProducts();
+
+        User user = users.stream().filter(user1 -> user1.getId().equalsIgnoreCase(userId)).findFirst().orElse(null);
+
+        if(user == null) return 3;
+
+        ArrayList<String> wishList = user.getWishlist();
+
+
+        for(String product: wishList){
+            if(product.equalsIgnoreCase(productId)){
                 return 0;
             }
         }
 
         for(Product product: products){
             if(product.getId().equalsIgnoreCase(productId)){
-                wishList.add(product);
+                wishList.add(product.getId());
                 return 1;
             }
         }
-
         return 2;
     }
 

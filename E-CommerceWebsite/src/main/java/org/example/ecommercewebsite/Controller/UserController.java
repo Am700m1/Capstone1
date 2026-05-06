@@ -93,7 +93,7 @@ public class UserController {
     }
 
     @PutMapping("/put-offer/{userId}/{productId}/{percentage}")
-    public ResponseEntity<?> addOffer(@PathVariable String userId,@PathVariable String productId,@PathVariable Double percentage){
+    public ResponseEntity<?> addOffer(@PathVariable String userId,@PathVariable String productId,@PathVariable Integer percentage){
         return switch (userService.addOffer(userId, productId, percentage)){
             case 1 -> ResponseEntity.status(200).body(new ApiResponse("Offer was added successfully"));
             case 2 -> ResponseEntity.status(400).body(new ApiResponse("You are not authorized to do this action!"));
@@ -113,18 +113,19 @@ public class UserController {
         }
     }
 
-    @PostMapping("/add-to-wishlist/{productId}")
-    public ResponseEntity<?> addToWishList(@PathVariable String productId){
-        return switch (userService.addToWishList(productId)){
-            case 0 -> ResponseEntity.status(400).body(new ApiResponse("Product is already added to wishlist!"));
+    @PostMapping("/add-to-wishlist/{userId}/{productId}")
+    public ResponseEntity<?> addToWishList(@PathVariable String userId, @PathVariable String productId){
+        return switch (userService.addToWishList(userId, productId)){
             case 1 -> ResponseEntity.status(200).body(new ApiResponse("Product was added to the wishlist successfully"));
-            default -> ResponseEntity.status(400).body(new ApiResponse("Product was not found!"));
+            case 2 -> ResponseEntity.status(400).body(new ApiResponse("Product was not found!"));
+            case 3 -> ResponseEntity.status(400).body(new ApiResponse("User was not found!"));
+            default -> ResponseEntity.status(400).body(new ApiResponse("Product is already added to wishlist!"));
         };
     }
 
-    @GetMapping("/get-wishlist")
-    public ResponseEntity<?> getWishList(){
-        ArrayList<Product> wishlist = userService.getWishList();
+    @GetMapping("/get-wishlist/{userId}")
+    public ResponseEntity<?> getWishList(@PathVariable String userId){
+        ArrayList<Product> wishlist = userService.getWishlist(userId);
 
         if(wishlist.isEmpty()){
             return ResponseEntity.status(400).body(new ApiResponse("There is no products inside the wishlist!"));
